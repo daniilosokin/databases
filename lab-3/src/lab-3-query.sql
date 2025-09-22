@@ -30,3 +30,11 @@ SELECT model_title,
  WHERE end_time IS NOT NULL
  GROUP BY model_title
  ORDER BY duration;
+ 
+ /* =========================== ЗАПРОС 4 ============================ */
+SELECT point_title,
+       COUNT(return_point_id) as count
+  FROM rental_points
+       LEFT JOIN rental
+         ON rental.return_point_id = rental_points.point_id
+ GROUP BY point_id;
