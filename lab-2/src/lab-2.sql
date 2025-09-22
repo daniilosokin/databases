@@ -51,6 +51,7 @@ SELECT name,
 	     ON film_category.film_id = inventory.film_id
 	   JOIN category      
 	     ON category.category_id = film_category.category_id
+ WHERE MONTH(payment_date) = 7
  GROUP BY name
  ORDER BY amount DESC LIMIT 10;
 
