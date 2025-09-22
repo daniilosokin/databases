@@ -31,10 +31,26 @@ SELECT model_title,
  GROUP BY model_title
  ORDER BY duration;
  
- /* =========================== ЗАПРОС 4 ============================ */
+/* =========================== ЗАПРОС 4 ============================ */
 SELECT point_title,
-       COUNT(return_point_id) as count
+       COUNT(return_point_id) AS count
   FROM rental_points
        LEFT JOIN rental
          ON rental.return_point_id = rental_points.point_id
  GROUP BY point_id;
+ 
+/* =========================== ЗАПРОС 5 ============================ */
+  WITH customer_rental_counts AS 
+       (SELECT customer_id, 
+               COUNT(bicycle_id) AS rental_count 
+          FROM rental
+		 GROUP BY customer_id)
+SELECT first_name,
+       last_name,
+       rental_count AS count
+  FROM customers
+       JOIN customer_rental_counts
+       ON customer_rental_counts.customer_id = customers.customer_id
+ WHERE rental_count = 
+       (SELECT MAX(rental_count) 
+          FROM customer_rental_counts);
