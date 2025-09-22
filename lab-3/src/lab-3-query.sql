@@ -54,3 +54,19 @@ SELECT first_name,
  WHERE rental_count = 
        (SELECT MAX(rental_count) 
           FROM customer_rental_counts);
+          
+/* =========================== ЗАПРОС 6 ============================ */
+WITH customer_rental_avg AS
+	 (SELECT customer_id, 
+             AVG(TIMESTAMPDIFF(HOUR, start_time, end_time)) AS rental_avg
+        FROM rental
+       WHERE end_time IS NOT NULL
+	   GROUP BY customer_id)
+SELECT first_name,
+       last_name,
+       rental_avg AS avg
+  FROM customers
+	   JOIN customer_rental_avg
+		 ON customer_rental_avg.customer_id = customers.customer_id
+ WHERE rental_avg > 3
+ GROUP BY customers.customer_id;
