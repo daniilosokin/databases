@@ -71,7 +71,7 @@ SELECT customer.first_name,
  WHERE actor.first_name = 'RUSSELL' 
    AND actor.last_name  = 'CLOSE'
  GROUP BY customer.customer_id
- ORDER BY films_count DESC LIMIT 5 OFFSET 5;
+ ORDER BY films_count DESC LIMIT 5 OFFSET 4;
 
 /* ======================= ЗАДАНИЕ 7 ======================= */
 WITH films_revenue AS 
