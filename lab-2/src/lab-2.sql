@@ -126,19 +126,19 @@ SELECT customer.first_name AS customer_first_name,
           customer.first_name;
           
  /* ======================= ЗАДАНИЕ 10 ====================== */
-(SELECT MAX(f.length) AS col1,
+(SELECT MAX(length) AS col1,
         COUNT(*)      AS col2
-   FROM film f
-  WHERE f.length = 
+   FROM film
+  WHERE length = 
         (SELECT MAX(length) 
            FROM film))
 
   UNION ALL
 
-(SELECT MIN(f.length) AS col1,
+(SELECT MIN(length) AS col1,
         COUNT(*)      AS col2
-   FROM film f
-  WHERE f.length = 
+   FROM film
+  WHERE length = 
         (SELECT MIN(length) 
            FROM film))
 
