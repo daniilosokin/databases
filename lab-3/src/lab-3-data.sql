@@ -39,12 +39,18 @@ VALUES (1, 1, 1, '2025-09-03 10:05:00'),
 
 /* ==================== РЕДАКТИРОВАНИЕ ЗАПИСЕЙ ==================== */
 UPDATE bike_rental.rental
-   SET end_time = '2025-09-11 21:00:00', return_point_id = 4
- WHERE bicycle_id = 14 AND end_time IS NULL AND return_point_id IS NULL;
+   SET end_time = '2025-09-11 21:00:00', 
+       return_point_id = 4
+ WHERE bicycle_id = 14
+   AND end_time IS NULL
+   AND return_point_id IS NULL;
 
 UPDATE bike_rental.rental
-   SET end_time = '2025-09-10 18:33:00', return_point_id = 4
- WHERE bicycle_id = 11 AND end_time IS NULL AND return_point_id IS NULL;
+   SET end_time = '2025-09-10 18:33:00', 
+       return_point_id = 4
+ WHERE bicycle_id = 11 
+   AND end_time IS NULL 
+   AND return_point_id IS NULL;
 
 UPDATE bike_rental.model
    SET model_title = 'Stern'
