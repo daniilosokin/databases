@@ -11,7 +11,7 @@ SELECT DISTINCT point_id,
        point_title
   FROM rental
        JOIN rental_points
-         ON rental_points.pick_point_id = rental.point_id
+         ON rental_points.point_id = rental.pick_point_id
 	   JOIN bicycles
 		 ON bicycles.bicycle_id = rental.bicycle_id
 	   JOIN models
