@@ -1,15 +1,15 @@
-/* ======================= TASK 1 ======================= */
+/* ======================= ЗАДАНИЕ 1 ======================= */
 SELECT title, 
        description 
   FROM film
  WHERE title LIKE '%tin%';
 
-/* ======================= TASK 2 ======================= */
+/* ======================= ЗАДАНИЕ 2 ======================= */
 SELECT DISTINCT first_name 
   FROM actor
  ORDER BY first_name ASC;
 
-/* ======================= TASK 3 ======================= */
+/* ======================= ЗАДАНИЕ 3 ======================= */
 SELECT first_name, 
        last_name, 
 	   country 
@@ -24,7 +24,7 @@ SELECT first_name,
 	OR country LIKE 'Italy' 
     OR country LIKE 'Spain';
 
-/* ======================= TASK 4 ======================= */
+/* ======================= ЗАДАНИЕ 4 ======================= */
 SELECT title, 
        name AS category 
   FROM film
@@ -39,7 +39,7 @@ SELECT title,
  WHERE first_name LIKE 'FRED' 
    AND last_name  LIKE 'COSTNER';
     
-/* ======================= TASK 5 ======================= */
+/* ======================= ЗАДАНИЕ 5 ======================= */
 SELECT name        AS category, 
 	   SUM(amount) AS payment_amount 
   FROM payment
@@ -54,7 +54,7 @@ SELECT name        AS category,
  GROUP BY name
  ORDER BY payment_amount DESC LIMIT 10;
 
-/* ======================= TASK 6 ======================= */
+/* ======================= ЗАДАНИЕ 6 ======================= */
 SELECT customer.first_name, 
        customer.last_name, 
        COUNT(rental.rental_id) AS films_count 
@@ -72,7 +72,7 @@ SELECT customer.first_name,
  GROUP BY customer.customer_id
  ORDER BY films_count DESC LIMIT 5 OFFSET 5;
 
-/* ======================= TASK 7 ======================= */
+/* ======================= ЗАДАНИЕ 7 ======================= */
 WITH films_revenue AS 
      (SELECT film.film_id, 
              SUM(amount) AS revenue 
@@ -95,18 +95,20 @@ SELECT title,
  WHERE film.film_id IN 
 	   (SELECT film_id 
           FROM films_revenue
-	     WHERE revenue = (SELECT MIN(revenue) 
-                            FROM films_revenue));
+	     WHERE revenue = 
+               (SELECT MIN(revenue) 
+                  FROM films_revenue));
 
-/* ======================= TASK 8 ======================= */
+/* ======================= ЗАДАНИЕ 8 ======================= */
   WITH film_actor_counts AS 
        (SELECT film_id, 
                COUNT(actor_id) AS actor_count 
           FROM film_actor
 		 GROUP BY film_id)
-SELECT actor_count AS actors, 
+SELECT actor_count    AS actors, 
        COUNT(film_id) AS films 
   FROM film_actor_counts
- WHERE actor_count = (SELECT MIN(actor_count) AS min_count 
-                        FROM film_actor_counts)
+ WHERE actor_count = 
+       (SELECT MIN(actor_count) AS min_count 
+          FROM film_actor_counts)
  GROUP BY actor_count;
