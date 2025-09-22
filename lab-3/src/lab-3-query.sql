@@ -1,10 +1,10 @@
 /* =========================== ЗАПРОС 1 ============================ */
 SELECT model_title,
-       COUNT(model.model_id) AS count
+       COUNT(models.model_id) AS count
   FROM bicycles
-	   JOIN model
-		 ON model.model_id = bicycles.model_id
- GROUP BY model.model_id;
+	   JOIN models
+		 ON models.model_id = bicycles.model_id
+ GROUP BY models.model_id;
  
 /* =========================== ЗАПРОС 2 ============================ */
 SELECT DISTINCT point_id,
@@ -14,8 +14,8 @@ SELECT DISTINCT point_id,
          ON rental_points.pick_point_id = rental.point_id
 	   JOIN bicycles
 		 ON bicycles.bicycle_id = rental.bicycle_id
-	   JOIN model
-         ON model.model_id = bicycles.model_id
+	   JOIN models
+         ON models.model_id = bicycles.model_id
  WHERE model_title LIKE 'Bianchi Oltre'
  ORDER BY point_title;
  
@@ -23,8 +23,8 @@ SELECT DISTINCT point_id,
 SELECT model_title,
        SUM(TIMESTAMPDIFF(HOUR, start_time, end_time)) AS duration
   FROM bicycles
-	   JOIN model
-		 ON model.model_id = bicycles.model_id
+	   JOIN models
+		 ON models.model_id = bicycles.model_id
 	   JOIN rental
 		 ON rental.bicycle_id = bicycles.bicycle_id
  WHERE end_time IS NOT NULL

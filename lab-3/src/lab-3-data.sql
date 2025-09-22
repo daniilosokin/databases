@@ -1,5 +1,5 @@
 /* ====================== ЗАПОЛНЕНИЕ ТАБЛИЦ ======================= */
-INSERT INTO bike_rental.model (model_title) 
+INSERT INTO bike_rental.models (model_title) 
 VALUES ('Stels'),
        ('Format'),
        ('Bianchi Oltre'),
@@ -52,7 +52,7 @@ UPDATE bike_rental.rental
    AND end_time IS NULL 
    AND return_point_id IS NULL;
 
-UPDATE bike_rental.model
+UPDATE bike_rental.models
    SET model_title = 'Stern'
  WHERE model_id = 1;
 
