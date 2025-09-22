@@ -1,9 +1,9 @@
 /* =========================== ЗАПРОС 1 ============================ */
 SELECT model_title,
-       COUNT(models.model_id) AS count
-  FROM bicycles
-	   JOIN models
-		 ON models.model_id = bicycles.model_id
+       COUNT(bicycles.model_id) AS count
+  FROM models
+	   LEFT JOIN bicycles
+		 ON bicycles.model_id = models.model_id
  GROUP BY models.model_id;
  
 /* =========================== ЗАПРОС 2 ============================ */
