@@ -40,8 +40,8 @@ SELECT title,
    AND last_name  LIKE 'COSTNER';
     
 /* ======================= ЗАДАНИЕ 5 ======================= */
-SELECT name        AS category, 
-	   SUM(amount) AS payment_amount 
+SELECT name, 
+	   SUM(amount) AS amount 
   FROM payment
        JOIN rental        
          ON rental.rental_id = payment.rental_id
@@ -52,7 +52,7 @@ SELECT name        AS category,
 	   JOIN category      
 	     ON category.category_id = film_category.category_id
  GROUP BY name
- ORDER BY payment_amount DESC LIMIT 10;
+ ORDER BY amount DESC LIMIT 10;
 
 /* ======================= ЗАДАНИЕ 6 ======================= */
 SELECT customer.first_name, 
@@ -109,6 +109,65 @@ SELECT actor_count    AS actors,
        COUNT(film_id) AS films 
   FROM film_actor_counts
  WHERE actor_count = 
-       (SELECT MIN(actor_count) AS min_count 
+       (SELECT MIN(actor_count) 
           FROM film_actor_counts)
  GROUP BY actor_count;
+ 
+ /* ======================= ЗАДАНИЕ 9 ======================= */
+SELECT customer.first_name AS customer_first_name, 
+       customer.last_name  AS customer_last_name,
+       actor.first_name    AS actor_first_name,
+       actor.last_name     AS actor_last_name
+  FROM customer
+       LEFT JOIN actor 
+       ON customer.last_name = actor.last_name
+ ORDER BY customer.last_name, 
+          customer.first_name;
+          
+ /* ======================= ЗАДАНИЕ 10 ====================== */
+(SELECT MAX(f.length) AS col1,
+        COUNT(*)      AS col2
+   FROM film f
+  WHERE f.length = 
+        (SELECT MAX(length) 
+           FROM film))
+
+  UNION ALL
+
+(SELECT MIN(f.length) AS col1,
+        COUNT(*)      AS col2
+   FROM film f
+  WHERE f.length = 
+        (SELECT MIN(length) 
+           FROM film))
+
+  UNION ALL
+
+ (WITH film_actor_counts AS 
+       (SELECT film_id, 
+               COUNT(actor_id) AS actor_count 
+          FROM film_actor
+		 GROUP BY film_id)
+SELECT actor_count    AS col1, 
+       COUNT(film_id) AS col2
+  FROM film_actor_counts
+ WHERE actor_count = 
+       (SELECT MAX(actor_count)
+          FROM film_actor_counts)
+ GROUP BY actor_count)
+
+  UNION ALL
+
+ (WITH film_actor_counts AS 
+       (SELECT film_id, 
+               COUNT(actor_id) AS actor_count 
+          FROM film_actor
+		 GROUP BY film_id)
+SELECT actor_count    AS col1, 
+       COUNT(film_id) AS col2
+  FROM film_actor_counts
+ WHERE actor_count = 
+       (SELECT MIN(actor_count)
+          FROM film_actor_counts)
+ GROUP BY actor_count);
+ 
