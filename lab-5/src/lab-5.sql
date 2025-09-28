@@ -94,33 +94,48 @@ BEGIN
         WHERE
             end_time IS NOT NULL;
     
-    DECLARE CONTINUE HANDLER FOR NOT FOUND SET finished = 1;
+    DECLARE CONTINUE HANDLER FOR NOT FOUND
+    SET
+        finished = 1;
 
-    OPEN cursor_rental_duration;
+    OPEN 
+        cursor_rental_duration;
     
     read_loop: LOOP
-        FETCH cursor_rental_duration 
-        INTO current_duration;
+        FETCH 
+            cursor_rental_duration 
+        INTO
+            current_duration;
         
-        IF finished = 1 THEN
+        IF 
+            finished = 1 THEN
             LEAVE read_loop;
         END IF;
           
-        IF rental_count = 0 THEN
-            SET min_duration = current_duration;
-            SET max_duration = current_duration;
+        IF 
+            rental_count = 0 THEN
+            SET 
+                min_duration = current_duration;
+            SET 
+                max_duration = current_duration;
         END IF;
         
-        IF current_duration < min_duration THEN
-            SET min_duration = current_duration;
+        IF 
+            current_duration < min_duration THEN
+            SET
+                min_duration = current_duration;
         END IF;
         
-        IF current_duration > max_duration THEN
-            SET max_duration = current_duration;
+        IF 
+            current_duration > max_duration THEN
+            SET 
+                max_duration = current_duration;
         END IF;
         
-        SET total_duration = total_duration + current_duration;
-        SET rental_count = rental_count + 1;
+        SET 
+            total_duration = total_duration + current_duration;
+        SET 
+            rental_count = rental_count + 1;
     END LOOP;
     
     CLOSE cursor_rental_duration;
@@ -128,7 +143,7 @@ BEGIN
     SELECT
         min_duration AS min,
         max_duration AS max,
-        total_duration / rental_count AS avg;
+        if(rental_count = 0, NULL, total_duration / rental_count) AS avg;
 END;//
 
 DELIMITER ;
