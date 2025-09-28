@@ -57,4 +57,21 @@ DELIMITER //
 			   END ; //
 DELIMITER ;
 
+/* =========================== ЗАДАНИЕ 7 ============================ */
+DELIMITER //
+	CREATE TRIGGER rental_delete_log_trigger 
+			BEFORE DELETE 
+                ON rental
+		       FOR EACH ROW
+	         BEGIN
+				   INSERT INTO logs (username, timestamp, data) 
+				    VALUE (USER(), CURDATE(), CONCAT_WS(',',
+                                                        OLD.bicycle_id, 
+                                                        OLD.pick_point_id, 
+                                                        OLD.customer_id,
+														OLD.start_time,
+														COALESCE(OLD.end_time, 'NULL'),
+                                                        COALESCE(OLD.return_point_id, 'NULL')));
+	           END ; //
+DELIMITER ;
 
