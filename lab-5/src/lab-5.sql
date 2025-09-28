@@ -44,3 +44,31 @@ BEGIN
 END//
 
 DELIMITER ;
+
+/* =========================== ЗАДАНИЕ 4 ============================ */
+DELIMITER //
+
+CREATE PROCEDURE 
+    filtered_data()
+BEGIN
+    SELECT 
+        concat_fields(first_name, last_name) as full_name,
+        serial_number,
+        model_title,
+        arithmetic_operation(start_time, end_time) as duration
+    FROM 
+        rental
+    JOIN
+        customers
+        ON rental.customer_id = customers.customer_id
+    JOIN 
+        bicycles 
+        ON rental.bicycle_id = bicycles.bicycle_id
+    JOIN 
+        models 
+        ON bicycles.model_id = models.model_id
+    WHERE 
+        arithmetic_operation(start_time, end_time) > 3;
+END;//
+
+DELIMITER ;
