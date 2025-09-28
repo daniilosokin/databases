@@ -29,7 +29,7 @@ WITH CASCADED CHECK OPTION;
 
 /* =========================== ЗАДАНИЕ 5 ============================ */
 DELIMITER //
-	CREATE TRIGGER current_time_triger
+	CREATE TRIGGER current_time_trigger
 			BEFORE INSERT
 		        ON rental
 	           FOR EACH ROW
@@ -39,3 +39,22 @@ DELIMITER //
 		           END IF;
 			   END ; //
 DELIMITER ;
+
+/* =========================== ЗАДАНИЕ 6 ============================ */
+DELIMITER //
+	CREATE TRIGGER rental_point_verify_trigger
+			BEFORE INSERT
+		        ON rental
+	           FOR EACH ROW
+	         BEGIN
+				     IF NEW.pick_point_id NOT IN 
+                        (SELECT point_id 
+                           FROM rental_points) 
+				   THEN
+                        SIGNAL SQLSTATE '45000' 
+                        SET MESSAGE_TEXT = 'ОШИБКА: указана не существующая точка выдачи';
+		            END IF;
+			   END ; //
+DELIMITER ;
+
+
