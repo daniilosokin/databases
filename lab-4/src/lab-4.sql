@@ -19,3 +19,10 @@ CREATE VIEW inserted_view AS
        FROM bicycles
 	  WHERE model_id = 9)
 WITH LOCAL CHECK OPTION;
+
+/* =========================== ЗАДАНИЕ 4 ============================ */
+CREATE VIEW cascaded_view AS
+    (SELECT *
+       FROM inserted_view
+	  WHERE serial_number LIKE '%002%')
+WITH CASCADED CHECK OPTION;
