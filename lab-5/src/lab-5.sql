@@ -79,68 +79,57 @@ DELIMITER //
 CREATE PROCEDURE 
     aggregated_with_cursor()
 BEGIN
-    DECLARE is_done          BOOL DEFAULT FALSE;
-    DECLARE min_duration     INT  DEFAULT NULL;
-    DECLARE max_duration     INT  DEFAULT NULL;
-    DECLARE total_duration   INT  DEFAULT 0;
-    DECLARE count_records    INT  DEFAULT 0;
     DECLARE current_duration INT;
+    DECLARE min_duration INT DEFAULT NULL;
+    DECLARE max_duration INT DEFAULT NULL;
+    DECLARE total_duration BIGINT DEFAULT 0;
+    DECLARE rental_count INT DEFAULT 0;
+    DECLARE finished INT DEFAULT 0;
     
-    DECLARE duration_cursor CURSOR
-    FOR
+    DECLARE cursor_rental_duration CURSOR FOR 
         SELECT 
-            TIMESTAMPDIFF(MINUTE, start_time, end_time) AS duration
-        FROM 
+            TIMESTAMPDIFF(HOUR, start_time, end_time) AS duration 
+        FROM
             rental
-        WHERE 
+        WHERE
             end_time IS NOT NULL;
-            
-    DECLARE CONTINUE HANDLER 
-    FOR 
-        NOT FOUND 
-    SET 
-        is_done = TRUE;
     
-    OPEN 
-        duration_cursor;
-        
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET finished = 1;
+
+    OPEN cursor_rental_duration;
+    
     read_loop: LOOP
-        FETCH 
-            duration_cursor 
-        INTO 
-            current_duration;
-            
-        IF 
-            is_done 
-            THEN
-                LEAVE read_loop;
+        FETCH cursor_rental_duration 
+        INTO current_duration;
+        
+        IF finished = 1 THEN
+            LEAVE read_loop;
+        END IF;
+          
+        IF rental_count = 0 THEN
+            SET min_duration = current_duration;
+            SET max_duration = current_duration;
         END IF;
         
-        IF 
-            min_duration IS NULL 
-            OR current_duration < min_duration 
-            THEN SET 
-                min_duration = current_duration;
+        IF current_duration < min_duration THEN
+            SET min_duration = current_duration;
         END IF;
         
-        IF 
-            max_duration IS NULL
-            OR current_duration > max_duration
-            THEN SET 
-                max_duration = current_duration;
+        IF current_duration > max_duration THEN
+            SET max_duration = current_duration;
         END IF;
         
         SET total_duration = total_duration + current_duration;
-        SET count_records  = count_records  + 1;
+        SET rental_count = rental_count + 1;
     END LOOP;
     
-    CLOSE 
-        duration_cursor;
-    SELECT 
+    CLOSE cursor_rental_duration;
+
+    SELECT
         min_duration AS min,
         max_duration AS max,
-        IF(count_records > 0, total_duration / count_records, NULL) AS avg;
-END; //
+        total_duration / rental_count AS avg;
+END;//
 
 DELIMITER ;
 
@@ -150,21 +139,14 @@ DELIMITER //
 CREATE PROCEDURE 
     aggregated_without_cursor()
 BEGIN
-    WITH
-        rental_duration AS (
-            SELECT 
-                TIMESTAMPDIFF(MINUTE, start_time, end_time) AS duration
-            FROM 
-                rental
-            WHERE 
-                end_time IS NOT NULL
-        )
     SELECT 
-        MIN(rental_duration.duration) AS min,
-        MAX(rental_duration.duration) AS max,
-        AVG(rental_duration.duration) AS avg
+        MIN(TIMESTAMPDIFF(HOUR, start_time, end_time)) AS min,
+        MAX(TIMESTAMPDIFF(HOUR, start_time, end_time)) AS max,
+        AVG(TIMESTAMPDIFF(HOUR, start_time, end_time)) AS avg
     FROM 
-        rental_duration;
-END; //
+        rental
+    WHERE 
+        end_time IS NOT NULL;
+END;//
 
 DELIMITER ;
