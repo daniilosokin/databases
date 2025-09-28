@@ -30,3 +30,17 @@ BEGIN
 END//
 
 DELIMITER ;
+
+/* =========================== ЗАДАНИЕ 3 ============================ */
+DELIMITER //
+
+CREATE FUNCTION
+    arithmetic_operation(start_time DATETIME, end_time DATETIME)
+RETURNS 
+    INT
+DETERMINISTIC
+BEGIN
+    RETURN TIMESTAMPDIFF(HOUR, start_time, end_time);
+END//
+
+DELIMITER ;
