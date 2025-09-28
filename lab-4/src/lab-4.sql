@@ -9,6 +9,13 @@ CREATE VIEW non_updated_view AS
       
 /* =========================== ЗАДАНИЕ 2 ============================ */
 CREATE VIEW updated_view AS
-     SELECT point_id,
-            point_title
-       FROM rental_points;
+	(SELECT point_id,
+		    point_title
+	   FROM rental_points);
+
+/* =========================== ЗАДАНИЕ 3 ============================ */
+CREATE VIEW inserted_view AS
+    (SELECT *
+       FROM bicycles
+	  WHERE model_id = 9)
+WITH LOCAL CHECK OPTION;
