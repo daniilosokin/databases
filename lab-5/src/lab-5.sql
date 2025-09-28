@@ -143,3 +143,28 @@ BEGIN
 END; //
 
 DELIMITER ;
+
+/* =========================== ЗАДАНИЕ 5 ============================ */
+DELIMITER //
+
+CREATE PROCEDURE 
+    aggregated_without_cursor()
+BEGIN
+    WITH
+        rental_duration AS (
+            SELECT 
+                TIMESTAMPDIFF(MINUTE, start_time, end_time) AS duration
+            FROM 
+                rental
+            WHERE 
+                end_time IS NOT NULL
+        )
+    SELECT 
+        MIN(rental_duration.duration) AS min,
+        MAX(rental_duration.duration) AS max,
+        AVG(rental_duration.duration) AS avg
+    FROM 
+        rental_duration;
+END; //
+
+DELIMITER ;
