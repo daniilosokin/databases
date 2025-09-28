@@ -16,3 +16,17 @@ BEGIN
 END;//
 
 DELIMITER ;
+
+/* =========================== ЗАДАНИЕ 2 ============================ */
+DELIMITER //
+
+CREATE FUNCTION
+    concat_fields(lhs VARCHAR(99), rhs VARCHAR(99))
+RETURNS 
+    VARCHAR(200)
+DETERMINISTIC
+BEGIN
+    RETURN CONCAT(lhs, ' ', rhs);
+END//
+
+DELIMITER ;
