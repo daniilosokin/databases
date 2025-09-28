@@ -1,6 +1,6 @@
 /* =========================== ЗАДАНИЕ 1 ============================ */
 CREATE VIEW non_updated_view AS
-     SELECT model_title,
+	 SELECT model_title,
             COUNT(bicycle_id) AS count
        FROM models
             LEFT JOIN bicycles
@@ -9,20 +9,33 @@ CREATE VIEW non_updated_view AS
       
 /* =========================== ЗАДАНИЕ 2 ============================ */
 CREATE VIEW updated_view AS
-	(SELECT point_id,
+	 SELECT point_id,
 		    point_title
-	   FROM rental_points);
+	   FROM rental_points;
 
 /* =========================== ЗАДАНИЕ 3 ============================ */
 CREATE VIEW inserted_view AS
-    (SELECT *
+     SELECT *
        FROM bicycles
-	  WHERE model_id = 9)
-WITH LOCAL CHECK OPTION;
+	  WHERE model_id = 9
+ WITH LOCAL CHECK OPTION;
 
 /* =========================== ЗАДАНИЕ 4 ============================ */
-CREATE VIEW cascaded_view AS
-    (SELECT *
-       FROM inserted_view
-	  WHERE serial_number LIKE '%002%')
+  CREATE VIEW cascaded_view AS
+       SELECT *
+         FROM inserted_view
+        WHERE serial_number LIKE '%002%'
 WITH CASCADED CHECK OPTION;
+
+/* =========================== ЗАДАНИЕ 5 ============================ */
+DELIMITER //
+	CREATE TRIGGER current_time_triger
+			BEFORE INSERT
+		        ON rental
+	           FOR EACH ROW
+	         BEGIN
+				    IF NEW.start_time IS NULL THEN
+                       SET NEW.start_time = CURDATE();
+		           END IF;
+			   END ; //
+DELIMITER ;
