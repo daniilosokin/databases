@@ -1,8 +1,7 @@
 /* =========================== ИНДЕКСЫ 1 ============================ */
 CREATE INDEX 
     artist_name_index 
-ON 
-    discogs.artist(NAME);
+    ON discogs.artist(NAME);
 
 ALTER TABLE 
     discogs.artist 
@@ -14,7 +13,7 @@ EXPLAIN SELECT
 FROM 
     discogs.artist
 WHERE 
-    NAME = "Пикник";
+    NAME = 'Пикник';
     
 /* =========================== ИНДЕКСЫ 2 ============================ */
 CREATE INDEX 
@@ -33,20 +32,24 @@ DROP INDEX
     group_main_artist_id_index,
 DROP INDEX 
     group_group_artist_id_index;
-
-SELECT 
+    
+EXPLAIN SELECT 
     * 
 FROM 
     discogs.artist
 WHERE 
-    discogs.artist.ARTIST_ID IN (
+    ARTIST_ID IN (
         SELECT 
             GROUP_ARTIST_ID 
         FROM 
             discogs.group
-        JOIN 
-            discogs.artist 
-            ON discogs.artist.ARTIST_ID = discogs.group.MAIN_ARTIST_ID
         WHERE 
-            discogs.artist.NAME = "Пикник"
+            MAIN_ARTIST_ID = (
+                SELECT
+                    ARTIST_ID 
+                FROM 
+                    discogs.artist 
+                WHERE
+                    NAME = 'Пикник'
+            )
     );
