@@ -44,10 +44,10 @@ SET SESSION interactive_timeout = 600;
 
 CREATE INDEX 
     release_title_realeased_index 
-    ON discogs.release(TITLE, RELEASED);
+    ON discogs.release(TITLE);
     
 ALTER TABLE 
-    discogs.release_artist 
+    discogs.release 
 DROP INDEX 
     release_title_realeased_index;
 
