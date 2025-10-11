@@ -37,3 +37,42 @@ JOIN
     ON discogs.group.MAIN_ARTIST_ID = band.ARTIST_ID
 WHERE 
     band.NAME = 'Пикник';
+    
+/* =========================== ИНДЕКСЫ 3 ============================ */
+SET SESSION        wait_timeout = 600;
+SET SESSION interactive_timeout = 600;
+
+CREATE INDEX 
+    release_title_realeased_index 
+    ON discogs.release(TITLE, RELEASED);
+    
+ALTER TABLE 
+    discogs.release_artist 
+DROP INDEX 
+    release_title_realeased_index;
+
+CREATE INDEX 
+    release_artist_artist_id_index 
+    ON discogs.release_artist(ARTIST_ID);
+    
+ALTER TABLE 
+    discogs.release_artist 
+DROP INDEX 
+    release_artist_artist_id_index;
+
+EXPLAIN SELECT 
+    artist.NAME, 
+    TITLE, 
+    RELEASED 
+FROM 
+    discogs.release
+JOIN 
+    discogs.release_artist 
+    ON discogs.release_artist.RELEASE_ID = discogs.release.RELEASE_ID
+JOIN 
+    discogs.artist
+    ON discogs.artist.ARTIST_ID = discogs.release_artist.ARTIST_ID
+WHERE 
+    artist.NAME = 'Пикник' 
+ORDER BY 
+    RELEASED DESC;
