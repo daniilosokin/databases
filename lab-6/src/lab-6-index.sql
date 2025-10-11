@@ -17,21 +17,13 @@ WHERE
     
 /* =========================== ИНДЕКСЫ 2 ============================ */
 CREATE INDEX 
-    group_main_artist_id_index 
-ON 
-    discogs.group(MAIN_ARTIST_ID);
-    
-CREATE INDEX 
-    group_group_artist_id_index 
-ON 
-    discogs.group(GROUP_ARTIST_ID);
+    group_artist_id_index 
+    ON discogs.group(GROUP_ARTIST_ID, MAIN_ARTIST_ID);
     
 ALTER TABLE 
     discogs.group 
 DROP INDEX 
-    group_main_artist_id_index,
-DROP INDEX 
-    group_group_artist_id_index;
+    group_artist_id_index;
     
 EXPLAIN SELECT 
     * 
