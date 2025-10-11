@@ -77,7 +77,6 @@ WHERE
 ORDER BY 
     RELEASED DESC;
 
-
 /* =========================== ИНДЕКСЫ 4 ============================ */
 CREATE INDEX 
     style_release_id_index 
@@ -108,3 +107,21 @@ JOIN
 WHERE 
     YEAR(RELEASED) = 2005
     AND IS_MAIN_RELEASE = 1;
+
+/* =========================== ИНДЕКСЫ 5 ============================ */
+CREATE FULLTEXT INDEX 
+    artist_profile_fulltext_index 
+    ON discogs.artist(PROFILE);
+    
+ALTER TABLE 
+    discogs.artist
+DROP INDEX 
+    artist_profile_fulltext_index;
+
+EXPLAIN SELECT
+    *
+FROM
+    discogs.artist 
+WHERE 
+    MATCH (artist.PROFILE) 
+    AGAINST ('Russian');
