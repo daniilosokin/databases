@@ -26,22 +26,14 @@ DROP INDEX
     group_main_artist_id_index;
     
 EXPLAIN SELECT 
-    * 
+    artist.* 
 FROM 
     discogs.artist
+JOIN 
+    discogs.group 
+    ON artist.ARTIST_ID = discogs.group.GROUP_ARTIST_ID
+JOIN 
+    discogs.artist AS band 
+    ON discogs.group.MAIN_ARTIST_ID = band.ARTIST_ID
 WHERE 
-    ARTIST_ID IN (
-        SELECT 
-            GROUP_ARTIST_ID 
-        FROM 
-            discogs.group
-        WHERE 
-            MAIN_ARTIST_ID = (
-                SELECT
-                    ARTIST_ID 
-                FROM 
-                    discogs.artist 
-                WHERE
-                    NAME = 'Пикник'
-            )
-    );
+    band.NAME = 'Пикник';
