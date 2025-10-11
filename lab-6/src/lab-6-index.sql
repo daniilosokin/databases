@@ -76,3 +76,35 @@ WHERE
     artist.NAME = 'Пикник' 
 ORDER BY 
     RELEASED DESC;
+
+
+/* =========================== ИНДЕКСЫ 4 ============================ */
+CREATE INDEX 
+    style_release_id_index 
+    ON discogs.style(RELEASE_ID);
+    
+ALTER TABLE 
+    discogs.style 
+DROP INDEX 
+    style_release_id_index;
+    
+CREATE INDEX 
+    release_is_main_release_released_index ON 
+    discogs.release(IS_MAIN_RELEASE, RELEASED);
+    
+ALTER TABLE 
+    discogs.release 
+DROP INDEX 
+    release_is_main_release_released_index;
+
+EXPLAIN SELECT 
+    discogs.release.*, 
+    STYLE_NAME 
+FROM 
+    discogs.release
+JOIN 
+    discogs.style 
+    ON discogs.release.RELEASE_ID = discogs.style.RELEASE_ID
+WHERE 
+    YEAR(RELEASED) = 2005
+    AND IS_MAIN_RELEASE = 1;
